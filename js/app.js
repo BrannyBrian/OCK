@@ -30,6 +30,30 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
     .catch((err) => alert(err.message));
 });
 
+// Show/Hide Popup
+const popupContainer = document.getElementById("popup-container");
+const loginForm = document.getElementById("login-form");
+const signupForm = document.getElementById("signup-form");
+const switchToSignup = document.getElementById("switch-to-signup");
+const switchToLogin = document.getElementById("switch-to-login");
+
+// Show Login Popup on Page Load
+window.addEventListener("load", () => {
+  popupContainer.classList.remove("hidden");
+});
+
+// Switch Between Login and Sign-Up
+switchToSignup.addEventListener("click", () => {
+  loginForm.classList.add("hidden");
+  signupForm.classList.remove("hidden");
+});
+
+switchToLogin.addEventListener("click", () => {
+  signupForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+});
+                          
+
 // Hamburger Menu
 document.getElementById("hamburger").addEventListener("click", () => {
   document.getElementById("menu").classList.toggle("hidden");
