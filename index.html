@@ -11,35 +11,34 @@
 </head>
 <body>
   <!-- Login/Sign-Up Popups -->
-  <div id="popup-container" class="hidden">
-    <div class="popup-box">
-      <form id="login-form">
-        <h2>Login</h2>
-        <input type="email" placeholder="Email" id="login-email" required>
-        <input type="password" placeholder="Password" id="login-password" required>
-        <button type="submit">Login</button>
-        <button type="button" id="google-login">Login with Google</button>
-        <p>Don't have an account? <span id="switch-to-signup">Sign up</span></p>
-      </form>
+<div id="popup-container">
+  <div class="popup-box">
+    <!-- Sign-Up Form -->
+    <form id="signup-form">
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Name" id="signup-name" required>
+      <input type="email" placeholder="Email" id="signup-email" required>
+      <input type="password" placeholder="Password" id="signup-password" required>
+      <input type="password" placeholder="Confirm Password" id="confirm-password" required>
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <span id="switch-to-login">Login</span></p>
+      <button type="button" class="guest-btn">Continue as Guest</button>
+    </form>
 
-      <form id="signup-form" class="hidden">
-        <h2>Sign Up</h2>
-        <input type="email" placeholder="Email" id="signup-email" required>
-        <input type="password" placeholder="Password" id="signup-password" required>
-        <button type="submit">Sign Up</button>
-        <p>Already have an account? <span id="switch-to-login">Login</span></p>
-      </form>
-    </div>
+    <!-- Login Form -->
+    <form id="login-form" class="hidden">
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" id="login-email" required>
+      <input type="password" placeholder="Password" id="login-password" required>
+      <p class="forgot-password">Forgot Password?</p>
+      <button type="submit">Login</button>
+      <button type="button" id="google-login">Login with Google</button>
+      <p>Don't have an account? <span id="switch-to-signup">Sign up</span></p>
+      <button type="button" class="guest-btn">Continue as Guest</button>
+    </form>
   </div>
-  <form id="login-form">
-  <h2>Login</h2>
-  <input type="email" placeholder="Email" id="login-email" required>
-  <input type="password" placeholder="Password" id="login-password" required>
-  <p class="forgot-password">Forgot Password?</p>
-  <button type="submit">Login</button>
-  <button type="button" id="google-login">Login with Google</button>
-  <p>Don't have an account? <span id="switch-to-signup">Sign up</span></p>
-  </form>
+</div>
+  
 
   <!-- Header -->
   <header>
