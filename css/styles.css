@@ -238,6 +238,9 @@ form p.forgot-password:hover {
 .popup-box::after:hover {
   color: #007bff;
   }
+.hidden {
+  display: none;
+}
 
 .slider {
   position: relative;
