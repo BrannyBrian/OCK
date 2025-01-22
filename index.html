@@ -3,26 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Services Website</title>
+  <title>Professional Services Website</title>
   <link rel="stylesheet" href="css/styles.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js"></script>
 </head>
 <body>
-  <!-- Login Section -->
-  <div id="auth-section" class="overlay">
-    <form id="login-form" class="pop-in">
-      <h2>Login</h2>
-      <input type="email" placeholder="Email" id="email" required>
-      <input type="password" placeholder="Password" id="password" required>
-      <button type="submit">Login</button>
-      <button id="google-login">Login with Google</button>
-      <p>Don't have an account? <span id="sign-up-link">Sign up</span></p>
-    </form>
+  <!-- Login/Sign-Up Popups -->
+  <div id="popup-container" class="hidden">
+    <div class="popup-box">
+      <form id="login-form">
+        <h2>Login</h2>
+        <input type="email" placeholder="Email" id="login-email" required>
+        <input type="password" placeholder="Password" id="login-password" required>
+        <button type="submit">Login</button>
+        <button type="button" id="google-login">Login with Google</button>
+        <p>Don't have an account? <span id="switch-to-signup">Sign up</span></p>
+      </form>
+
+      <form id="signup-form" class="hidden">
+        <h2>Sign Up</h2>
+        <input type="email" placeholder="Email" id="signup-email" required>
+        <input type="password" placeholder="Password" id="signup-password" required>
+        <button type="submit">Sign Up</button>
+        <p>Already have an account? <span id="switch-to-login">Login</span></p>
+      </form>
+    </div>
   </div>
 
-  <!-- Main Website -->
+  <!-- Header -->
   <header>
     <div class="hamburger" id="hamburger">
       <i class="fas fa-bars"></i>
@@ -35,40 +45,34 @@
     </nav>
   </header>
 
-  <section class="slider">
-    <div class="slide">
-      <img src="images/slide1.jpg" alt="Slide 1">
-      <div class="slide-text">Transform your future!</div>
-    </div>
-    <div class="slide">
-      <img src="images/slide2.jpg" alt="Slide 2">
-      <div class="slide-text">Get expert coaching today!</div>
-    </div>
-    <div class="slide">
-      <img src="images/slide3.jpg" alt="Slide 3">
-      <div class="slide-text">Achieve your dreams abroad!</div>
-    </div>
-  </section>
-
-  <main id="services" class="pop-in">
+  <!-- Main Section -->
+  <section id="services">
     <h2>Our Services</h2>
     <div class="service-box">
+      <i class="fas fa-user-md"></i>
       <h3>OET Training</h3>
+      <p>Specialized coaching for healthcare professionals preparing for OET exams.</p>
       <button class="apply-btn">Apply</button>
     </div>
     <div class="service-box">
+      <i class="fas fa-briefcase"></i>
       <h3>Teaching Jobs Abroad</h3>
+      <p>Connect with schools in Australia, UK, and USA for teaching positions.</p>
       <button class="apply-btn">Apply</button>
     </div>
     <div class="service-box">
+      <i class="fas fa-comments"></i>
       <h3>Interview Coaching</h3>
+      <p>Get personalized coaching to excel in job interviews abroad.</p>
       <button class="apply-btn">Apply</button>
     </div>
     <div class="service-box">
+      <i class="fas fa-book"></i>
       <h3>IELTS Training</h3>
+      <p>Expert guidance to achieve your desired IELTS band score.</p>
       <button class="apply-btn">Apply</button>
     </div>
-  </main>
+  </section> 
 
   <section id="testimonials">
     <h2>What Our Clients Say</h2>
