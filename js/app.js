@@ -17,19 +17,29 @@ const auth = getAuth(app);
 // Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
 const loginForm = document.getElementById("login-form");
-const switchToLogin = document.getElementById("switch-to-login");
 const switchToSignup = document.getElementById("switch-to-signup");
+const switchToLogin = document.getElementById("switch-to-login");
 
-// Toggle between Sign-Up and Login forms
+// Toggle Between Login and Sign-Up
+switchToSignup.addEventListener("click", () => {
+  loginForm.classList.add("hidden");
+  signupForm.classList.remove("hidden");
+});
+
 switchToLogin.addEventListener("click", () => {
   signupForm.classList.add("hidden");
   loginForm.classList.remove("hidden");
 });
 
-switchToSignup.addEventListener("click", () => {
-  loginForm.classList.add("hidden");
-  signupForm.classList.remove("hidden");
-});
+// Continue as Guest
+const guestButtons = document.querySelectorAll(".guest-btn");
+guestButtons.forEach(button =>
+  button.addEventListener("click", () => {
+    alert("You are continuing as a guest.");
+    // Add redirection logic or functionality as required.
+  })
+);
+                          
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
