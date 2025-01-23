@@ -119,17 +119,73 @@
     </div>
   </div>
   </section>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-  const preloader = document.getElementById("preloader");
-  const content = document.getElementById("content");
+  
+    <script type="module">
+  import { auth } from "./app.js";
+  import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
-  setTimeout(() => {
-    preloader.classList.add("hidden");
-    content.style.display = "block";
-  }, 5000);
-});
-             </script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const preloader = document.getElementById("preloader");
+    const content = document.getElementById("content");
+
+    // Show content after preloader delay
+    setTimeout(() => {
+      preloader.classList.add("hidden");
+      content.style.display = "block";
+    }, 5000);
+
+    // Forgot Password Functionality
+    const forgotPasswordForm = document.createElement("form");
+    forgotPasswordForm.id = "forgot-password-form";
+    forgotPasswordForm.innerHTML = `
+      <h2>Reset Password</h2>
+      <input type="email" placeholder="Enter your email" id="reset-email" required>
+      <button type="submit">Send Reset Link</button>
+      <p><span id="back-to-login">Back to Login</span></p>
+    `;
+
+    const popupContainer = document.getElementById("popup-container");
+    popupContainer.appendChild(forgotPasswordForm);
+
+    const loginForm = document.getElementById("login-form");
+    const forgotPasswordLink = document.getElementById("forgot-password-link");
+
+    forgotPasswordLink.addEventListener("click", () => {
+      loginForm.classList.add("hidden");
+      forgotPasswordForm.classList.remove("hidden");
+    });
+
+    forgotPasswordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const resetEmail = document.getElementById("reset-email").value;
+
+      try {
+        await sendPasswordResetEmail(auth, resetEmail);
+        displayMessage("Password reset email sent! Check your inbox.");
+        forgotPasswordForm.classList.add("hidden");
+        loginForm.classList.remove("hidden");
+      } catch (error) {
+        displayMessage(`Error: ${error.message}`, false);
+      }
+    });
+
+    document.getElementById("back-to-login").addEventListener("click", () => {
+      forgotPasswordForm.classList.add("hidden");
+      loginForm.classList.remove("hidden");
+    });
+
+    const messageContainer = document.getElementById("message-container");
+    const displayMessage = (message, isSuccess = true) => {
+      messageContainer.textContent = message;
+      messageContainer.style.color = isSuccess ? "green" : "red";
+      messageContainer.style.display = "block";
+      setTimeout(() => {
+        messageContainer.style.display = "none";
+      }, 5000);
+    };
+  });
+    </script>
+  
   <!-- Firebase SDKs -->
 <script type="module" src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js"></script>
 <script type="module" src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"></script>
