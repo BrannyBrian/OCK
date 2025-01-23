@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signInWithPopup, 
-  sendPasswordResetEmail,
+  sendPasswordResetEmail, 
   GoogleAuthProvider 
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { 
@@ -16,7 +16,7 @@ import {
   getDoc 
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-// Your web app's Firebase configuration
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAr4HjTArpBk6BEpIdIdGF7qs4k8B5oe4Q",
   authDomain: "xyz-limited.firebaseapp.com",
@@ -32,6 +32,19 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app); // Initialize Analytics
 const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
+
+// Message container for status updates
+const messageContainer = document.getElementById("message-container");
+
+// Function to display messages
+const displayMessage = (message, isSuccess = true) => {
+  messageContainer.textContent = message;
+  messageContainer.style.color = isSuccess ? "green" : "red";
+  messageContainer.style.display = "block";
+  setTimeout(() => {
+    messageContainer.style.display = "none";
+  }, 5000);
+};
 
 // Elements for Forgot Password functionality
 const forgotPasswordLink = document.getElementById("forgot-password-link");
@@ -68,23 +81,19 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
 
   try {
     await sendPasswordResetEmail(auth, resetEmail);
-    alert("Password reset email sent! Check your inbox.");
-    // Optionally toggle back to the login form
+    displayMessage("Password reset email sent! Check your inbox.");
     forgotPasswordForm.classList.add("hidden");
     loginForm.classList.remove("hidden");
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 });
-  
 
 // Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
-const loginForm = document.getElementById("login-form");
 const switchToSignup = document.getElementById("switch-to-signup");
 const switchToLogin = document.getElementById("switch-to-login");
 
-// Toggle Between Login and Sign-Up Forms
 switchToSignup.addEventListener("click", () => {
   loginForm.classList.add("hidden");
   signupForm.classList.remove("hidden");
@@ -97,7 +106,6 @@ switchToLogin.addEventListener("click", () => {
 
 // Password Toggle Functionality
 const togglePasswordIcons = document.querySelectorAll(".toggle-password");
-
 togglePasswordIcons.forEach((icon) => {
   icon.addEventListener("click", () => {
     const input = icon.previousElementSibling;
@@ -116,7 +124,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
   const confirmPassword = document.getElementById("confirm-password").value;
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match!");
+    displayMessage("Passwords do not match!", false);
     return;
   }
 
@@ -126,14 +134,14 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
 
     // Save user data in Firestore
     await setDoc(doc(db, "users", user.uid), {
-      name: name,
-      email: email,
+      name,
+      email,
       createdAt: new Date(),
     });
 
-    alert("Sign-Up successful!");
+    displayMessage("Sign-Up successful!");
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 });
 
@@ -152,13 +160,12 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("User Data:", docSnap.data());
-      alert("Login successful!");
+      displayMessage("Login successful!");
     } else {
-      alert("No user data found!");
+      displayMessage("No user data found!", false);
     }
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 });
 
@@ -183,9 +190,9 @@ const googleHandler = async (isSignup) => {
       });
     }
 
-    alert(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
+    displayMessage(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 };
 
