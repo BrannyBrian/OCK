@@ -37,14 +37,14 @@ header {
 
 #preloader .spinner i {
   font-size: 60px;
-  color: white;
+  color: #007bff;
   animation: spin 2s linear infinite;
 }
 
 #preloader .spinner p {
   font-family: "Poppins", sans-serif;
   font-size: 18px;
-  color: #333;
+  color: #ffffff;
   margin-top: 10px;
 }
 
