@@ -57,18 +57,20 @@ window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   const content = document.getElementById("content");
 
-  // Wait 5 seconds before hiding the preloader and showing the content
+  // Wait 5 seconds before hiding the preloader
   setTimeout(() => {
-    preloader.style.opacity = "0"; // Fade-out animation
-    preloader.style.transition = "opacity 0.5s ease";
+    // Fade-out animation
+    preloader.style.transition = "opacity 0.3s ease";
+    preloader.style.opacity = "0";
 
-    // Wait for the fade-out to complete before hiding the preloader
-    setTimeout(() => {
-      preloader.style.display = "none"; // Completely hide preloader
+    // Wait for fade-out to complete before hiding the preloader
+    preloader.addEventListener("transitionend", () => {
+      preloader.style.display = "none"; // Hide preloader completely
       content.style.display = "block"; // Show the main content
-    }, 500); // Match the fade-out duration
-  }, 5000); // Minimum loading time (5 seconds)
+    });
+  }, 3000); // Minimum loading time (5 seconds)
 });
+
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
