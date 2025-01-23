@@ -52,25 +52,20 @@ guestButtons.forEach((button) =>
   })
 );
 
-// Ensure preloader is visible for at least 5 seconds
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   const content = document.getElementById("content");
 
-  // Wait 5 seconds before hiding the preloader
+  // Ensure the logic runs after 5 seconds
   setTimeout(() => {
-    // Fade-out animation
-    preloader.style.transition = "opacity 0.3s ease";
-    preloader.style.opacity = "0";
-
-    // Wait for fade-out to complete before hiding the preloader
-    preloader.addEventListener("transitionend", () => {
-      preloader.style.display = "none"; // Hide preloader completely
-      content.style.display = "block"; // Show the main content
-    });
-  }, 3000); // Minimum loading time (5 seconds)
+    if (preloader) {
+      preloader.classList.add("hidden"); // Add the 'hidden' class to fade out the preloader
+    }
+    if (content) {
+      content.style.display = "block"; // Show the content
+    }
+  }, 5000); // 5 seconds delay
 });
-
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
