@@ -29,9 +29,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app); // Initialize Analytics
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Firestore
+const db = getFirestore(app);
 
 // Message container for status updates
 const messageContainer = document.getElementById("message-container");
@@ -46,9 +46,13 @@ const displayMessage = (message, isSuccess = true) => {
   }, 5000);
 };
 
-// Elements for Forgot Password functionality
-const forgotPasswordLink = document.getElementById("forgot-password-link");
+// Elements for forms
 const loginForm = document.getElementById("login-form");
+const signupForm = document.getElementById("signup-form");
+const forgotPasswordLink = document.getElementById("forgot-password-link");
+const popupContainer = document.getElementById("popup-container");
+
+// Forgot Password Form
 const forgotPasswordForm = document.createElement("form");
 forgotPasswordForm.id = "forgot-password-form";
 forgotPasswordForm.classList.add("hidden");
@@ -58,23 +62,14 @@ forgotPasswordForm.innerHTML = `
   <button type="submit">Send Reset Link</button>
   <p><span id="back-to-login">Back to Login</span></p>
 `;
+popupContainer.appendChild(forgotPasswordForm);
 
-// Add the Forgot Password form dynamically to the DOM
-document.getElementById("popup-container").appendChild(forgotPasswordForm);
-
-// Event: Toggle to Forgot Password form
+// Forgot Password Functionality
 forgotPasswordLink.addEventListener("click", () => {
   loginForm.classList.add("hidden");
   forgotPasswordForm.classList.remove("hidden");
 });
 
-// Event: Toggle back to Login form
-document.getElementById("back-to-login").addEventListener("click", () => {
-  forgotPasswordForm.classList.add("hidden");
-  loginForm.classList.remove("hidden");
-});
-
-// Event: Send Password Reset Email
 forgotPasswordForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const resetEmail = document.getElementById("reset-email").value;
@@ -89,17 +84,18 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Show/Hide Forms
-const signupForm = document.getElementById("signup-form");
-const switchToSignup = document.getElementById("switch-to-signup");
-const switchToLogin = document.getElementById("switch-to-login");
+document.getElementById("back-to-login").addEventListener("click", () => {
+  forgotPasswordForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+});
 
-switchToSignup.addEventListener("click", () => {
+// Toggle between Login and Signup Forms
+document.getElementById("switch-to-signup").addEventListener("click", () => {
   loginForm.classList.add("hidden");
   signupForm.classList.remove("hidden");
 });
 
-switchToLogin.addEventListener("click", () => {
+document.getElementById("switch-to-login").addEventListener("click", () => {
   signupForm.classList.add("hidden");
   loginForm.classList.remove("hidden");
 });
@@ -116,7 +112,7 @@ togglePasswordIcons.forEach((icon) => {
 });
 
 // Firebase Authentication: Sign-Up
-document.getElementById("signup-form").addEventListener("submit", async (e) => {
+signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("signup-name").value;
   const email = document.getElementById("signup-email").value;
@@ -140,13 +136,14 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
     });
 
     displayMessage("Sign-Up successful!");
+    signupForm.reset();
   } catch (error) {
     displayMessage(`Error: ${error.message}`, false);
   }
 });
 
 // Firebase Authentication: Login
-document.getElementById("login-form").addEventListener("submit", async (e) => {
+loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
@@ -161,6 +158,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
     if (docSnap.exists()) {
       displayMessage("Login successful!");
+      loginForm.reset();
     } else {
       displayMessage("No user data found!", false);
     }
@@ -169,7 +167,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   }
 });
 
-// Google Sign-In and Sign-Up
+// Google Sign-In/Sign-Up Handler
 const googleHandler = async (isSignup) => {
   const provider = new GoogleAuthProvider();
 
@@ -177,12 +175,11 @@ const googleHandler = async (isSignup) => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    // Check if user already exists in Firestore
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      // Save new Google user to Firestore
+      // Save new user data if signing up
       await setDoc(docRef, {
         name: user.displayName,
         email: user.email,
