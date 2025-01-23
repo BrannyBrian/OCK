@@ -167,6 +167,58 @@ form p.forgot-password:hover {
   font-size: 18px;
 }
 
+/* Password Input Wrapper */
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  width: 100%;
+  padding-right: 40px; /* Space for toggle icon */
+}
+
+.password-input .toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.password-input .toggle-password:hover {
+  color: #007bff;
+}
+
+/* Google Sign-Up Button */
+#google-signup {
+  background: #db4437;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#google-signup:hover {
+  background: #c23321;
+}
+
+/* Shared Google Button */
+#google-login i, #google-signup i {
+  font-size: 18px;
+}                  
+
 /* Hidden Forms */
 .hidden {
   display: none;
