@@ -34,7 +34,7 @@ switchToLogin.addEventListener("click", () => {
 // Password Toggle Functionality
 const togglePasswordIcons = document.querySelectorAll(".toggle-password");
 
-togglePasswordIcons.forEach(icon => {
+togglePasswordIcons.forEach((icon) => {
   icon.addEventListener("click", () => {
     const input = icon.previousElementSibling; // Select the input field
     const type = input.getAttribute("type") === "password" ? "text" : "password";
@@ -45,7 +45,7 @@ togglePasswordIcons.forEach(icon => {
 
 // Continue as Guest
 const guestButtons = document.querySelectorAll(".guest-btn");
-guestButtons.forEach(button =>
+guestButtons.forEach((button) =>
   button.addEventListener("click", () => {
     alert("You are continuing as a guest.");
     // Add redirection logic or functionality as required.
@@ -69,7 +69,6 @@ window.addEventListener("load", () => {
     }, 500); // Match the fade-out duration
   }, 5000); // Minimum loading time (5 seconds)
 });
-                                
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
@@ -129,6 +128,18 @@ document.getElementById("google-login").addEventListener("click", () => {
     });
 });
 
+// Google Sign-Up
+document.getElementById("google-signup").addEventListener("click", () => {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      alert("Google Sign-Up successful!");
+    })
+    .catch((error) => {
+      alert(`Error: ${error.message}`);
+    });
+});
+
 // Testimonials Scroll
 const reviews = document.querySelector(".reviews");
 let scrollAmount = 0;
@@ -141,4 +152,4 @@ setInterval(() => {
     });
   }
 }, 2000);
-  
+                            
