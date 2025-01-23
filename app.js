@@ -15,7 +15,7 @@ import {
   getDoc 
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-// Firebase Configuration
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAr4HjTArpBk6BEpIdIdGF7qs4k8B5oe4Q",
   authDomain: "xyz-limited.firebaseapp.com",
@@ -28,26 +28,41 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const analytics = getAnalytics(app); // Initialize Analytics
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db = getFirestore(app); // Initialize Firestore
 
-export { auth, db };
-
-// Display message utility
-const messageContainer = document.getElementById("message-container");
-const displayMessage = (message, isSuccess = true) => {
-  messageContainer.textContent = message;
-  messageContainer.style.color = isSuccess ? "green" : "red";
-  messageContainer.style.display = "block";
-  setTimeout(() => {
-    messageContainer.style.display = "none";
-  }, 5000);
-};
-
-// Handle Sign-Up Form
+// Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
-signupForm.addEventListener("submit", async (e) => {
+const loginForm = document.getElementById("login-form");
+const switchToSignup = document.getElementById("switch-to-signup");
+const switchToLogin = document.getElementById("switch-to-login");
+
+// Toggle Between Login and Sign-Up Forms
+switchToSignup.addEventListener("click", () => {
+  loginForm.classList.add("hidden");
+  signupForm.classList.remove("hidden");
+});
+
+switchToLogin.addEventListener("click", () => {
+  signupForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+});
+
+// Password Toggle Functionality
+const togglePasswordIcons = document.querySelectorAll(".toggle-password");
+
+togglePasswordIcons.forEach((icon) => {
+  icon.addEventListener("click", () => {
+    const input = icon.previousElementSibling;
+    const type = input.getAttribute("type") === "password" ? "text" : "password";
+    input.setAttribute("type", type);
+    icon.classList.toggle("fa-eye-slash");
+  });
+});
+
+// Firebase Authentication: Sign-Up
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("signup-name").value;
   const email = document.getElementById("signup-email").value;
@@ -55,7 +70,7 @@ signupForm.addEventListener("submit", async (e) => {
   const confirmPassword = document.getElementById("confirm-password").value;
 
   if (password !== confirmPassword) {
-    displayMessage("Passwords do not match!", false);
+    alert("Passwords do not match!");
     return;
   }
 
@@ -65,21 +80,19 @@ signupForm.addEventListener("submit", async (e) => {
 
     // Save user data in Firestore
     await setDoc(doc(db, "users", user.uid), {
-      name,
-      email,
+      name: name,
+      email: email,
       createdAt: new Date(),
     });
 
-    displayMessage("Sign-Up successful!");
-    signupForm.reset();
+    alert("Sign-Up successful!");
   } catch (error) {
-    displayMessage(`Error: ${error.message}`, false);
+    alert(`Error: ${error.message}`);
   }
 });
 
-// Handle Login Form
-const loginForm = document.getElementById("login-form");
-loginForm.addEventListener("submit", async (e) => {
+// Firebase Authentication: Login
+document.getElementById("login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
@@ -93,17 +106,17 @@ loginForm.addEventListener("submit", async (e) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      displayMessage("Login successful!");
-      loginForm.reset();
+      console.log("User Data:", docSnap.data());
+      alert("Login successful!");
     } else {
-      displayMessage("No user data found!", false);
+      alert("No user data found!");
     }
   } catch (error) {
-    displayMessage(`Error: ${error.message}`, false);
+    alert(`Error: ${error.message}`);
   }
 });
 
-// Google Sign-In/Sign-Up
+// Google Sign-In and Sign-Up
 const googleHandler = async (isSignup) => {
   const provider = new GoogleAuthProvider();
 
@@ -111,10 +124,12 @@ const googleHandler = async (isSignup) => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
+    // Check if user already exists in Firestore
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
+      // Save new Google user to Firestore
       await setDoc(docRef, {
         name: user.displayName,
         email: user.email,
@@ -122,12 +137,11 @@ const googleHandler = async (isSignup) => {
       });
     }
 
-    displayMessage(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
+    alert(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
   } catch (error) {
-    displayMessage(`Error: ${error.message}`, false);
+    alert(`Error: ${error.message}`);
   }
 };
 
 document.getElementById("google-login").addEventListener("click", () => googleHandler(false));
 document.getElementById("google-signup").addEventListener("click", () => googleHandler(true));
-  
