@@ -45,6 +45,13 @@ const displayMessage = (message, isSuccess = true) => {
   }, 5000);
 };
 
+// Function to redirect to home.html after successful authentication
+const redirectToHome = () => {
+  setTimeout(() => {
+    window.location.href = "home.html";
+  }, 2000); // Redirect after showing a success message for 2 seconds
+};
+
 // Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
 const loginForm = document.getElementById("login-form");
@@ -100,6 +107,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
 
     displayMessage("Sign-Up successful!");
     signupForm.reset();
+    redirectToHome(); // Redirect to home.html
   } catch (error) {
     displayMessage(`Error: ${error.message}`, false);
   }
@@ -122,6 +130,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     if (docSnap.exists()) {
       displayMessage("Login successful!");
       loginForm.reset();
+      redirectToHome(); // Redirect to home.html
     } else {
       displayMessage("No user data found!", false);
     }
@@ -152,6 +161,7 @@ const googleHandler = async (isSignup) => {
     }
 
     displayMessage(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
+    redirectToHome(); // Redirect to home.html
   } catch (error) {
     displayMessage(`Error: ${error.message}`, false);
   }
@@ -159,4 +169,4 @@ const googleHandler = async (isSignup) => {
 
 document.getElementById("google-login").addEventListener("click", () => googleHandler(false));
 document.getElementById("google-signup").addEventListener("click", () => googleHandler(true));
-  
+      
