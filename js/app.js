@@ -52,12 +52,20 @@ guestButtons.forEach(button =>
   })
 );
 
-// Remove Preloader After Page Loads
+// Ensure preloader is visible for at least 5 seconds
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
-  preloader.style.opacity = 0;
-  setTimeout(() => preloader.style.display = "none", 500); // Delay for smooth fading
-});                   
+  const content = document.getElementById("content");
+
+  setTimeout(() => {
+    preloader.style.opacity = 0; // Fade out effect
+    setTimeout(() => {
+      preloader.style.display = "none"; // Completely hide after fade
+      content.style.display = "block"; // Show the content
+    }, 500); // Wait for fade-out duration
+  }, 5000); // Minimum loading time
+});
+                                
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
