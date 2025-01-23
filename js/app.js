@@ -31,6 +31,18 @@ switchToLogin.addEventListener("click", () => {
   loginForm.classList.remove("hidden");
 });
 
+// Password Toggle Functionality
+const togglePasswordIcons = document.querySelectorAll(".toggle-password");
+
+togglePasswordIcons.forEach(icon => {
+  icon.addEventListener("click", () => {
+    const input = icon.previousElementSibling; // Select the input field
+    const type = input.getAttribute("type") === "password" ? "text" : "password";
+    input.setAttribute("type", type);
+    icon.classList.toggle("fa-eye-slash"); // Toggle the icon
+  });
+});
+
 // Continue as Guest
 const guestButtons = document.querySelectorAll(".guest-btn");
 guestButtons.forEach(button =>
@@ -39,6 +51,7 @@ guestButtons.forEach(button =>
     // Add redirection logic or functionality as required.
   })
 );
+                     
                           
 
 // Hamburger Menu Toggle
