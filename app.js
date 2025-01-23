@@ -1,20 +1,36 @@
 // Import Firebase modules
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider 
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  setDoc, 
+  doc, 
+  getDoc 
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-// Firebase Configuration
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyAr4HjTArpBk6BEpIdIdGF7qs4k8B5oe4Q",
+  authDomain: "xyz-limited.firebaseapp.com",
+  projectId: "xyz-limited",
+  storageBucket: "xyz-limited.firebasestorage.app",
+  messagingSenderId: "355786361945",
+  appId: "1:355786361945:web:da1f577f81f75c7d35b548",
+  measurementId: "G-91DJEG89FG",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app); // Initialize Analytics
 const auth = getAuth(app);
+const db = getFirestore(app); // Initialize Firestore
 
 // Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
@@ -45,40 +61,8 @@ togglePasswordIcons.forEach((icon) => {
   });
 });
 
-// Continue as Guest
-const guestButtons = document.querySelectorAll(".guest-btn");
-guestButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    alert("You are continuing as a guest.");
-    // Additional guest logic here
-  });
-});
-
-// Hamburger Menu Toggle
-const hamburger = document.getElementById("hamburger");
-const menu = document.getElementById("menu");
-
-hamburger.addEventListener("click", () => {
-  menu.classList.toggle("hidden");
-});
-
-// Firebase Authentication: Login
-document.getElementById("login-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("Login successful!");
-    })
-    .catch((error) => {
-      alert(`Error: ${error.message}`);
-    });
-});
-
 // Firebase Authentication: Sign-Up
-document.getElementById("signup-form").addEventListener("submit", (e) => {
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("signup-name").value;
   const email = document.getElementById("signup-email").value;
@@ -90,49 +74,75 @@ document.getElementById("signup-form").addEventListener("submit", (e) => {
     return;
   }
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("Sign-Up successful!");
-    })
-    .catch((error) => {
-      alert(`Error: ${error.message}`);
-    });
-});
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-// Google Sign-In
-document.getElementById("google-login").addEventListener("click", () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      alert("Google login successful!");
-    })
-    .catch((error) => {
-      alert(`Error: ${error.message}`);
+    // Save user data in Firestore
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      email: email,
+      createdAt: new Date(),
     });
-});
 
-// Google Sign-Up
-document.getElementById("google-signup").addEventListener("click", () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      alert("Google Sign-Up successful!");
-    })
-    .catch((error) => {
-      alert(`Error: ${error.message}`);
-    });
-});
-
-// Testimonials Scroll
-const reviews = document.querySelector(".reviews");
-let scrollAmount = 0;
-
-setInterval(() => {
-  if (reviews) {
-    reviews.scrollTo({
-      left: (scrollAmount += 300) % reviews.scrollWidth,
-      behavior: "smooth",
-    });
+    alert("Sign-Up successful!");
+  } catch (error) {
+    alert(`Error: ${error.message}`);
   }
-}, 2000);
+});
+
+// Firebase Authentication: Login
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Fetch user data from Firestore
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("User Data:", docSnap.data());
+      alert("Login successful!");
+    } else {
+      alert("No user data found!");
+    }
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+});
+
+// Google Sign-In and Sign-Up
+const googleHandler = async (isSignup) => {
+  const provider = new GoogleAuthProvider();
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Check if user already exists in Firestore
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      // Save new Google user to Firestore
+      await setDoc(docRef, {
+        name: user.displayName,
+        email: user.email,
+        createdAt: new Date(),
+      });
+    }
+
+    alert(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+};
+
+document.getElementById("google-login").addEventListener("click", () => googleHandler(false));
+document.getElementById("google-signup").addEventListener("click", () => googleHandler(true));
   
