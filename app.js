@@ -1,7 +1,8 @@
-// Firebase Initialization
+// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_AUTH_DOMAIN",
@@ -11,6 +12,7 @@ const firebaseConfig = {
   appId: "YOUR_APP_ID",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -20,7 +22,7 @@ const loginForm = document.getElementById("login-form");
 const switchToSignup = document.getElementById("switch-to-signup");
 const switchToLogin = document.getElementById("switch-to-login");
 
-// Toggle Between Login and Sign-Up
+// Toggle Between Login and Sign-Up Forms
 switchToSignup.addEventListener("click", () => {
   loginForm.classList.add("hidden");
   signupForm.classList.remove("hidden");
@@ -36,21 +38,21 @@ const togglePasswordIcons = document.querySelectorAll(".toggle-password");
 
 togglePasswordIcons.forEach((icon) => {
   icon.addEventListener("click", () => {
-    const input = icon.previousElementSibling; // Select the input field
+    const input = icon.previousElementSibling;
     const type = input.getAttribute("type") === "password" ? "text" : "password";
     input.setAttribute("type", type);
-    icon.classList.toggle("fa-eye-slash"); // Toggle the icon
+    icon.classList.toggle("fa-eye-slash");
   });
 });
 
 // Continue as Guest
 const guestButtons = document.querySelectorAll(".guest-btn");
-guestButtons.forEach((button) =>
+guestButtons.forEach((button) => {
   button.addEventListener("click", () => {
     alert("You are continuing as a guest.");
-    // Add redirection logic or functionality as required.
-  })
-);
+    // Additional guest logic here
+  });
+});
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
@@ -60,8 +62,7 @@ hamburger.addEventListener("click", () => {
   menu.classList.toggle("hidden");
 });
 
-// Firebase Authentication
-// Login
+// Firebase Authentication: Login
 document.getElementById("login-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const email = document.getElementById("login-email").value;
@@ -76,7 +77,7 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
     });
 });
 
-// Sign-Up
+// Firebase Authentication: Sign-Up
 document.getElementById("signup-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const name = document.getElementById("signup-name").value;
@@ -134,3 +135,4 @@ setInterval(() => {
     });
   }
 }, 2000);
+  
