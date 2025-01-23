@@ -52,21 +52,6 @@ guestButtons.forEach((button) =>
   })
 );
 
-window.addEventListener("load", () => {
-  const preloader = document.getElementById("preloader");
-  const content = document.getElementById("content");
-
-  // Ensure the logic runs after 5 seconds
-  setTimeout(() => {
-    if (preloader) {
-      preloader.classList.add("hidden"); // Add the 'hidden' class to fade out the preloader
-    }
-    if (content) {
-      content.style.display = "block"; // Show the content
-    }
-  }, 5000); // 5 seconds delay
-});
-
 // Hamburger Menu Toggle
 const hamburger = document.getElementById("hamburger");
 const menu = document.getElementById("menu");
