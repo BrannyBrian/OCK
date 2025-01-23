@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signInWithPopup, 
+  sendPasswordResetEmail,
   GoogleAuthProvider 
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { 
@@ -31,6 +32,51 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app); // Initialize Analytics
 const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
+
+// Elements for Forgot Password functionality
+const forgotPasswordLink = document.getElementById("forgot-password-link");
+const loginForm = document.getElementById("login-form");
+const forgotPasswordForm = document.createElement("form");
+forgotPasswordForm.id = "forgot-password-form";
+forgotPasswordForm.classList.add("hidden");
+forgotPasswordForm.innerHTML = `
+  <h2><i class="fas fa-envelope"></i> Reset Password</h2>
+  <input type="email" placeholder="Enter your email" id="reset-email" required>
+  <button type="submit">Send Reset Link</button>
+  <p><span id="back-to-login">Back to Login</span></p>
+`;
+
+// Add the Forgot Password form dynamically to the DOM
+document.getElementById("popup-container").appendChild(forgotPasswordForm);
+
+// Event: Toggle to Forgot Password form
+forgotPasswordLink.addEventListener("click", () => {
+  loginForm.classList.add("hidden");
+  forgotPasswordForm.classList.remove("hidden");
+});
+
+// Event: Toggle back to Login form
+document.getElementById("back-to-login").addEventListener("click", () => {
+  forgotPasswordForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+});
+
+// Event: Send Password Reset Email
+forgotPasswordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const resetEmail = document.getElementById("reset-email").value;
+
+  try {
+    await sendPasswordResetEmail(auth, resetEmail);
+    alert("Password reset email sent! Check your inbox.");
+    // Optionally toggle back to the login form
+    forgotPasswordForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+});
+  
 
 // Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
