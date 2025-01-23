@@ -32,6 +32,8 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+export { auth, db };
+
 // Display message utility
 const messageContainer = document.getElementById("message-container");
 const displayMessage = (message, isSuccess = true) => {
