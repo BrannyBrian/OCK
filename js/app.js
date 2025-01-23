@@ -57,13 +57,17 @@ window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   const content = document.getElementById("content");
 
+  // Wait 5 seconds before hiding the preloader and showing the content
   setTimeout(() => {
-    preloader.style.opacity = 0; // Fade out effect
+    preloader.style.opacity = "0"; // Fade-out animation
+    preloader.style.transition = "opacity 0.5s ease";
+
+    // Wait for the fade-out to complete before hiding the preloader
     setTimeout(() => {
-      preloader.style.display = "none"; // Completely hide after fade
-      content.style.display = "block"; // Show the content
-    }, 500); // Wait for fade-out duration
-  }, 5000); // Minimum loading time
+      preloader.style.display = "none"; // Completely hide preloader
+      content.style.display = "block"; // Show the main content
+    }, 500); // Match the fade-out duration
+  }, 5000); // Minimum loading time (5 seconds)
 });
                                 
 
