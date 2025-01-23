@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signInWithPopup, 
-  sendPasswordResetEmail, 
   GoogleAuthProvider 
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { 
@@ -33,10 +32,8 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Message container for status updates
+// Display message utility
 const messageContainer = document.getElementById("message-container");
-
-// Function to display messages
 const displayMessage = (message, isSuccess = true) => {
   messageContainer.textContent = message;
   messageContainer.style.color = isSuccess ? "green" : "red";
@@ -46,72 +43,8 @@ const displayMessage = (message, isSuccess = true) => {
   }, 5000);
 };
 
-// Elements for forms
-const loginForm = document.getElementById("login-form");
+// Handle Sign-Up Form
 const signupForm = document.getElementById("signup-form");
-const forgotPasswordLink = document.getElementById("forgot-password-link");
-const popupContainer = document.getElementById("popup-container");
-
-// Forgot Password Form
-const forgotPasswordForm = document.createElement("form");
-forgotPasswordForm.id = "forgot-password-form";
-forgotPasswordForm.classList.add("hidden");
-forgotPasswordForm.innerHTML = `
-  <h2><i class="fas fa-envelope"></i> Reset Password</h2>
-  <input type="email" placeholder="Enter your email" id="reset-email" required>
-  <button type="submit">Send Reset Link</button>
-  <p><span id="back-to-login">Back to Login</span></p>
-`;
-popupContainer.appendChild(forgotPasswordForm);
-
-// Forgot Password Functionality
-forgotPasswordLink.addEventListener("click", () => {
-  loginForm.classList.add("hidden");
-  forgotPasswordForm.classList.remove("hidden");
-});
-
-forgotPasswordForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const resetEmail = document.getElementById("reset-email").value;
-
-  try {
-    await sendPasswordResetEmail(auth, resetEmail);
-    displayMessage("Password reset email sent! Check your inbox.");
-    forgotPasswordForm.classList.add("hidden");
-    loginForm.classList.remove("hidden");
-  } catch (error) {
-    displayMessage(`Error: ${error.message}`, false);
-  }
-});
-
-document.getElementById("back-to-login").addEventListener("click", () => {
-  forgotPasswordForm.classList.add("hidden");
-  loginForm.classList.remove("hidden");
-});
-
-// Toggle between Login and Signup Forms
-document.getElementById("switch-to-signup").addEventListener("click", () => {
-  loginForm.classList.add("hidden");
-  signupForm.classList.remove("hidden");
-});
-
-document.getElementById("switch-to-login").addEventListener("click", () => {
-  signupForm.classList.add("hidden");
-  loginForm.classList.remove("hidden");
-});
-
-// Password Toggle Functionality
-const togglePasswordIcons = document.querySelectorAll(".toggle-password");
-togglePasswordIcons.forEach((icon) => {
-  icon.addEventListener("click", () => {
-    const input = icon.previousElementSibling;
-    const type = input.getAttribute("type") === "password" ? "text" : "password";
-    input.setAttribute("type", type);
-    icon.classList.toggle("fa-eye-slash");
-  });
-});
-
-// Firebase Authentication: Sign-Up
 signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("signup-name").value;
@@ -142,7 +75,8 @@ signupForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Firebase Authentication: Login
+// Handle Login Form
+const loginForm = document.getElementById("login-form");
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("login-email").value;
@@ -167,7 +101,7 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Google Sign-In/Sign-Up Handler
+// Google Sign-In/Sign-Up
 const googleHandler = async (isSignup) => {
   const provider = new GoogleAuthProvider();
 
@@ -179,7 +113,6 @@ const googleHandler = async (isSignup) => {
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      // Save new user data if signing up
       await setDoc(docRef, {
         name: user.displayName,
         email: user.email,
