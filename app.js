@@ -170,3 +170,11 @@ const googleHandler = async (isSignup) => {
 document.getElementById("google-login").addEventListener("click", () => googleHandler(false));
 document.getElementById("google-signup").addEventListener("click", () => googleHandler(true));
       
+// Guest Button Redirect
+const guestButton = document.querySelector(".guest-btn");
+
+guestButton.addEventListener("click", () => {
+  // Redirect to home.html
+  window.location.href = "home.html";
+});
+                                                            
