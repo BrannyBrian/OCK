@@ -32,6 +32,19 @@ const analytics = getAnalytics(app); // Initialize Analytics
 const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
 
+// Message container for displaying status
+const messageContainer = document.getElementById("message-container");
+
+// Function to display messages
+const displayMessage = (message, isSuccess = true) => {
+  messageContainer.textContent = message;
+  messageContainer.style.color = isSuccess ? "green" : "red";
+  messageContainer.style.display = "block";
+  setTimeout(() => {
+    messageContainer.style.display = "none";
+  }, 5000);
+};
+
 // Show/Hide Forms
 const signupForm = document.getElementById("signup-form");
 const loginForm = document.getElementById("login-form");
@@ -70,7 +83,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
   const confirmPassword = document.getElementById("confirm-password").value;
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match!");
+    displayMessage("Passwords do not match!", false);
     return;
   }
 
@@ -85,9 +98,10 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
       createdAt: new Date(),
     });
 
-    alert("Sign-Up successful!");
+    displayMessage("Sign-Up successful!");
+    signupForm.reset();
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 });
 
@@ -106,13 +120,13 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("User Data:", docSnap.data());
-      alert("Login successful!");
+      displayMessage("Login successful!");
+      loginForm.reset();
     } else {
-      alert("No user data found!");
+      displayMessage("No user data found!", false);
     }
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 });
 
@@ -137,11 +151,12 @@ const googleHandler = async (isSignup) => {
       });
     }
 
-    alert(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
+    displayMessage(`${isSignup ? "Google Sign-Up" : "Google Login"} successful!`);
   } catch (error) {
-    alert(`Error: ${error.message}`);
+    displayMessage(`Error: ${error.message}`, false);
   }
 };
 
 document.getElementById("google-login").addEventListener("click", () => googleHandler(false));
 document.getElementById("google-signup").addEventListener("click", () => googleHandler(true));
+  
