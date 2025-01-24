@@ -3,25 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Services Website</title>
+  <title>Professional Services Website</title>
   <link rel="stylesheet" href="css/styles.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js"></script>
 </head>
 <body>
-  <!-- Login Section -->
-  <div id="auth-section" class="overlay">
-    <form id="login-form" class="pop-in">
-      <h2>Login</h2>
-      <input type="email" placeholder="Email" id="email" required>
-      <input type="password" placeholder="Password" id="password" required>
-      <button type="submit">Login</button>
-      <button id="google-login">Login with Google</button>
-      <p>Don't have an account? <span id="sign-up-link">Sign up</span></p>
-    </form>
+    <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner">
+      <i class="fas fa-briefcase"></i>
+      <p>Preparing your immigration journey...</p>
+    </div>
   </div>
-  <!-- Main Website -->
+
+    <!-- Rest of the Content -->
+  <div id="content" style="display: none;">
+  <!-- Login/Sign-Up Popups -->
+  <div id="popup-container">
+    <div class="popup-box">
+      
+      <form id="signup-form">
+        <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+        <input type="text" placeholder="Full Name" id="signup-name" required>
+        <input type="email" placeholder="Email Address" id="signup-email" required>
+        <div class="password-input">
+          <input type="password" placeholder="Password" id="signup-password" required>
+          <i class="fas fa-eye toggle-password"></i>
+        </div>
+        <div class="password-input">
+          <input type="password" placeholder="Confirm Password" id="confirm-password" required>
+          <i class="fas fa-eye toggle-password"></i>
+        </div>
+        <button type="submit">Sign Up</button>
+        <div id="message-container" style="display: none; font-weight: bold;"></div>
+        <button type="button" id="google-signup"><i class="fab fa-google"></i> Sign Up with Google</button>
+        <p>Already have an account? <span id="switch-to-login">Login</span></p>
+      <button type="button" class="guest-btn">
+  <i class="fas fa-user"></i> Continue as Guest
+      </button>
+      </form>
+
+
+      <form id="login-form" class="hidden">
+        <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+        <input type="email" placeholder="Email Address" id="login-email" required>
+        <div class="password-input">
+          <input type="password" placeholder="Password" id="login-password" required>
+          <i class="fas fa-eye toggle-password"></i>
+        </div>
+        <p class="forgot-password"><i class="fas fa-key"></i> Forgot Password?</p>
+        <button type="submit">Login</button>
+        <div id="message-container" style="display: none; font-weight: bold;"></div>
+        <button type="button" id="google-login"><i class="fab fa-google"></i> Login with Google</button>
+        <p>Don't have an account? <span id="switch-to-signup">Sign Up</span></p>
+        <button type="button" class="guest-btn">
+  <i class="fas fa-user"></i> Continue as Guest
+        </button>
+                                                  
+      </form>
+    </div>
+  </div>
+        
+  <!-- Header -->
   <header>
     <div class="hamburger" id="hamburger">
       <i class="fas fa-bars"></i>
@@ -33,39 +76,36 @@
       <a href="#contact">Contact</a>
     </nav>
   </header>
-  <section class="slider">
-    <div class="slide">
-      <img src="images/slide1.jpg" alt="Slide 1">
-      <div class="slide-text">Transform your future!</div>
-    </div>
-    <div class="slide">
-      <img src="images/slide2.jpg" alt="Slide 2">
-      <div class="slide-text">Get expert coaching today!</div>
-    </div>
-    <div class="slide">
-      <img src="images/slide3.jpg" alt="Slide 3">
-      <div class="slide-text">Achieve your dreams abroad!</div>
-    </div>
+
+  <section id="services">
+  <h2>Our Services</h2>
+  <div class="service-box">
+    <i class="fas fa-user-md"></i>
+    <h3>OET Training</h3>
+    <p>Specialized coaching for healthcare professionals preparing for OET exams.</p>
+    <a href="application.html?service=OET" class="apply-btn">Apply</a>
+  </div>
+  <div class="service-box">
+    <i class="fas fa-briefcase"></i>
+    <h3>Teaching Jobs Abroad</h3>
+    <p>Connect with schools in Australia, UK, and USA for teaching positions.</p>
+    <a href="application.html?service=Teaching%20Jobs%20Abroad" class="apply-btn">Apply</a>
+  </div>
+  <div class="service-box">
+    <i class="fas fa-comments"></i>
+    <h3>Interview Coaching</h3>
+    <p>Get personalized coaching to excel in job interviews abroad.</p>
+    <a href="application.html?service=Interview%20Coaching" class="apply-btn">Apply</a>
+  </div>
+  <div class="service-box">
+    <i class="fas fa-book"></i>
+    <h3>IELTS Training</h3>
+    <p>Expert guidance to achieve your desired IELTS band score.</p>
+    <a href="application.html?service=IELTS%20Training" class="apply-btn">Apply</a>
+  </div>
   </section>
-  <main id="services" class="pop-in">
-    <h2>Our Services</h2>
-    <div class="service-box">
-      <h3>OET Training</h3>
-      <button class="apply-btn">Apply</button>
-    </div>
-    <div class="service-box">
-      <h3>Teaching Jobs Abroad</h3>
-      <button class="apply-btn">Apply</button>
-    </div>
-    <div class="service-box">
-      <h3>Interview Coaching</h3>
-      <button class="apply-btn">Apply</button>
-    </div>
-    <div class="service-box">
-      <h3>IELTS Training</h3>
-      <button class="apply-btn">Apply</button>
-    </div>
-  </main>
+      
+
   <section id="testimonials">
     <h2>What Our Clients Say</h2>
     <div class="reviews">
@@ -82,7 +122,28 @@
         <p>"Highly recommend interview coaching."</p>
       </div>
     </div>
+  </div>
   </section>
-  <script src="js/app.js"></script>
+  
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const preloader = document.getElementById("preloader");
+  const content = document.getElementById("content");
+  setTimeout(() => {
+    preloader.classList.add("hidden");
+    content.style.display = "block";
+  }, 5000);
+});
+    </script>
+  
+  <!-- Firebase SDKs -->
+<script type="module" src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js"></script>
+
+<!-- Your custom JavaScript file -->
+<script type="module" src="app.js"></script>
+  
 </body>
-    </html>
+              </html>
